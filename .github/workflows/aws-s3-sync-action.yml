@@ -13,9 +13,10 @@ jobs:
               uses: actions/setup-node@v1
               with:
                 node-version: 12
-              run: yarn install
-              run: yarn build
-              run: yarn test
+            - run: yarn install
+            - run: yarn build
+            - run: yarn test
+
             - name: Push build to S3
               uses: VishalVijay14/aws-s3-sync-action@master
               with:
