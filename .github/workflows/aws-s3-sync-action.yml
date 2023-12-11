@@ -20,7 +20,7 @@ jobs:
               uses: VishalVijay14/aws-s3-sync-action@master
               with:
                 access_key: AKIA5GZC3W4NBH6KHJVF
-                secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
+                secret_access_key: 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
                 region: 'us-east-1'
                 source: 'build'
                 destination_bucket: ${{ secrets.DESTINATION_BUCKET }}
