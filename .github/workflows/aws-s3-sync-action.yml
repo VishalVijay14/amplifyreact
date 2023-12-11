@@ -19,7 +19,7 @@ jobs:
             - name: Push build to S3
               uses: VishalVijay14/aws-s3-sync-action@master
               with:
-                access_key: ${{ secrets.ACCESS_KEY }}
+                access_key: AKIA5GZC3W4NBH6KHJVF
                 secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
                 region: 'us-east-1'
                 source: 'build'
