@@ -23,7 +23,7 @@ jobs:
                 secret_access_key: 6oQalRS1VjUq5BWqKQpzlA3Dr6XEEmdWWwl2BZLc
                 region: 'us-east-1'
                 source: 'build'
-                destination_bucket: ${{ secrets.DESTINATION_BUCKET }}
+                destination_bucket: aws-staticbucket01
                 destination_prefix: ${{ secrets.DESTINATION_PREFIX }}
                 exclude: '.git/*'
                 delete: true
