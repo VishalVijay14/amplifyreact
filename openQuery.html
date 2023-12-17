@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/aws-sdk@3"></script>
+        <script id=”facebook-jssdk” src=”https://connect.facebook.net/en_US/all.js”></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+</html>
+<body>
+    <button id="login">Login</button>
+    <button id="doQuery">Try the Query on DDB</button>
+</body>
+<div id="output"></div>
+<div id="fb-root"></div>
+
+<script type="text/javascript">
+    var fbUserId;
+    //var dynamodb = null;
+    //var docClient = null;
+    var appId = '231615893293344'; //from facebook meta developer app that we created 
+    var roleArn = 'arn:aws:iam::907921831706:role/2023DynamoDB'; //from AWS IAM
+
+document.getElementById('doQuery').onclick = function () {
+    dynamodb = new AWS.DynamoDB({region: 'us-west-2'});
+    docClient = new AWS.DynamoDB.DocumentClient({service: dynamodb});
+
+    var params = {
+    TableName: 'DynamoDB',
+    KeyConditionExpression: 'itemID = :thryle',
+    ExpressionAttributeValues: {
+        ':thryle': 'anything' // Replace 'someValue' with the actual value you are querying for
+    }
+}; //end params
+
+docClient.query(params, function(err, resultData) {
+    if (err) {
+        document.getElementById("output").innerHTML = JSON.stringify(err, null, 2);
+    } else {
+        resultData.Items.forEach(function(item) {
+            var x = item.sortKey;
+            document.getElementById("output").innerHTML = "this is my sort Key: " + x;
+        });
+    }
+});
+
+};
+
+// Load the FB JS SDK asynchronously
+(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) { return; }
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/all.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+// FB / AWS Integration
+window.fbAsyncInit = function () {
+    FB.init({ appId: appId });
+    document.getElementById('login').onclick = function () {
+        FB.login(function (response) {
+            if (response.authResponse) {
+                AWS.config.credentials = new AWS.WebIdentityCredentials({
+                    RoleArn: roleArn,
+                    ProviderId: 'graph.facebook.com',
+                    WebIdentityToken: response.authResponse.accessToken
+                });
+            } else {
+                console.log("Issue logging in");
+            }
+        });
+    }
+};
+</script>
