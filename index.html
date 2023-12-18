@@ -37,9 +37,16 @@
             </ul>
         </div>
     
-        <button style="margin-top: 20px; padding: 10px 20px; font-size: 16px; background-color: #333; color: #c5c5c5; border: none; border-radius: 5px; cursor: pointer;">
-            Start Your Adventure
-        </button>
+        <!-- The Modal -->
+<div id="gameModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="game"></div>
+    </div>
+</div>
+
+<button id="startGameButton" style="...">Start Your Adventure</button>
+
     </section>
     
     
@@ -52,6 +59,74 @@
                 x.className = "navbar";
             }
         }
+
+
+    // ... [Your existing toggleMenu function]
+
+    document.getElementById('startGameButton').addEventListener('click', startGame);
+
+function startGame() {
+    var modal = document.getElementById('gameModal');
+    modal.style.display = 'block';
+    generateGame();
+}
+
+function closeModal() {
+    var modal = document.getElementById('gameModal');
+    modal.style.display = 'none';
+}
+
+function generateGame() {
+    var gameContainer = document.getElementById('game');
+    gameContainer.innerHTML = ''; // Clear previous game
+
+    // Create a simple 4x4 grid of cards for matching
+    var matches = 8;
+    var cards = [];
+    for (var i = 0; i < matches * 2; i++) {
+        cards.push(i % matches); // Two of each card
+    }
+    cards.sort(function() { return 0.5 - Math.random(); }); // Shuffle cards
+
+    // Create card elements
+    for (var i = 0; i < cards.length; i++) {
+        var card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.matchId = cards[i]; // Store the match id in a data attribute
+        card.innerHTML = '<div class="front">?</div><div class="back">Match ' + cards[i] + '</div>';
+        card.addEventListener('click', flipCard);
+        gameContainer.appendChild(card);
+    }
+}
+
+var firstCard = null;
+function flipCard() {
+    if (firstCard && firstCard != this && firstCard.dataset.matchId == this.dataset.matchId) {
+        // It's a match!
+        firstCard.removeEventListener('click', flipCard);
+        this.removeEventListener('click', flipCard);
+        firstCard = null;
+    } else {
+        // Not a match or first card in a pair
+        this.classList.add('flipped');
+        if (firstCard) {
+            // If there was already a flipped card, flip them back after a short delay
+            setTimeout(function() {
+                firstCard.classList.remove('flipped');
+                firstCard = null;
+            }, 1000);
+        }
+        firstCard = this;
+    }
+}
+
+// Close the modal if the user clicks outside of it
+window.onclick = function(event) {
+    var modal = document.getElementById('gameModal');
+    if (event.target == modal) {
+        closeModal();
+    }
+}
     </script>
     
     </body>

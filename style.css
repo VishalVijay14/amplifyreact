@@ -75,3 +75,44 @@
                 text-align: left;
             }
         }
+
+        .modal .card {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .modal .front,
+        .modal .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+        
+        .modal .front {
+            background: #333;
+            color: #fff;
+            line-height: 100px;
+            text-align: center;
+        }
+        
+        .modal .back {
+            background: #555;
+            color: #fff;
+            transform: rotateY(180deg);
+            line-height: 100px;
+            text-align: center;
+        }
+        
+        .modal .card.flipped .front {
+            transform: rotateY(180deg);
+        }
+        
+        .modal .card.flipped .back {
+            transform: rotateY(0deg);
+        }
+        
